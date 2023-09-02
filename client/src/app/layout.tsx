@@ -12,10 +12,10 @@ import { Popover, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
 
-const metadata: Metadata = {
-  title: 'Weblog | Home',
-  description: 'Blog website for programming communities.',
-};
+// const metadata: Metadata = {
+//   title: 'Weblog | Home',
+//   description: 'Blog website for programming communities.',
+// };
 
 export default function RootLayout({
   children,
