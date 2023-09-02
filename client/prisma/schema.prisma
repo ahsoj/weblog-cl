@@ -1,0 +1,57 @@
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+
+enum Role {
+  USER
+  ADMIN
+}
+
+
+model User {
+    id               String    @id @default(auto()) @map("_id") @db.ObjectId
+    username         String?
+    email            String    @unique
+    hashedpassword   String
+    emailVerified    DateTime? @map("verifiedAt")
+    createdAt        DateTime  @default(now())
+    updatedAt        DateTime  @updatedAt
+    role             Role      @default(USER)
+    posts            Post[]
+
+    @@map("users")
+}
+
+
+model Post {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  slug          String    @unique
+  post_image    Image?     @relation(fields: [imageId], references: [id])
+  imageId       String    @db.ObjectId
+  content       String?
+  published     Boolean   @default(false)
+  members_only  Boolean   @default(false)
+  viewCount     Int       @default(0)
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String    @db.ObjectId
+
+  @@map("posts")
+}
+
+model Image {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  publicId      String    @unique
+  format        String
+  version       String
+  post          Post[]
+}

@@ -1,0 +1,171 @@
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+    id               String    @id @default(auto()) @map("_id") @db.ObjectId
+    username         String?
+    email            String    @unique
+    profileUrl       String?
+    passwordHash     String
+    emailVerified    DateTime? @map("verifiedAt")
+    createdAt        DateTime  @default(now())
+    updatedAt        DateTime  @updatedAt
+    role             Role      @default(USER)
+    bio              String?
+    post             Post[]
+    like             Like[]
+    comment          Comment[]
+    refreshTokens    RefreshToken[]
+    commentLike      CommentLike[]
+    postView         PostView[]
+    saved            Bookmark[]
+    followers        Follows[] @relation("following")
+    following        Follows[] @relation("follower")
+    socialLinks      SocialLinks[]
+
+    @@index(fields: [username, bio])
+    @@map("users")
+}
+
+model SocialLinks {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  site_name        String
+  link             String
+  userId           String    @db.ObjectId
+  user             User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model RefreshToken {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  hashedToken      String
+  userId           String    @db.ObjectId
+  user             User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  revoked          Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@map("refreshtokens")
+}
+
+model Post {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  slug          String    @unique
+  imageUrl      String?
+  content       Json?
+  published     Boolean   @default(false)
+  members_only  Boolean   @default(false)
+  viewCount     Int       @default(0)
+  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
+  author        User      @relation(fields: [authorId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  authorId      String    @db.ObjectId
+  tag           Tag[]
+  like          Like[]
+  comment       Comment[]
+  postView      PostView[]
+  saved         Bookmark[]
+
+  @@index(fields: [title])
+  @@map("posts")
+}
+
+model Bookmark {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  // name          String?
+  userId        String    @db.ObjectId
+  postId        String    @db.ObjectId
+  post          Post?     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user          User?     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+    @@map("saved")
+}
+
+model ResetUUID {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  uuid			String 		@unique
+}
+
+model PostView {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId
+  postId        String    @db.ObjectId
+  post          Post?     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user          User?     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("post_view")
+}
+
+model Tag {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  color_code    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  post          Post      @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId        String    @db.ObjectId
+
+  @@index(fields: [name])
+  @@map("tag")
+}
+
+model Like {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId
+  postId        String    @db.ObjectId
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  post          Post      @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("like")
+}
+
+model Comment {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String    @db.ObjectId
+  postId        String    @db.ObjectId
+  content       Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  post          Post      @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  commentLike   CommentLike[]
+
+  @@map("comment")
+}
+
+model CommentLike {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  commentId      String   @db.ObjectId
+  userId         String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  comment        Comment  @relation(fields: [commentId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user           User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  
+  @@map("comment_likes")
+}
+
+
+model Follows {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  followingId    String    @db.ObjectId
+  followerId     String    @db.ObjectId
+  following      User      @relation("following", fields: [followingId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  follower       User      @relation("follower", fields: [followerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  @@map("follows")
+}

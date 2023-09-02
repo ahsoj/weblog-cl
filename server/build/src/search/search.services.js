@@ -1,0 +1,42 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+// async function getRecommendedItems(userId, limit) {
+//   // Retrieve the user's reading history, likes, and comments
+//   const readingHistory = await prisma.readingHistory.findMany({
+//     where: { userId },
+//   });
+//   const likes = await prisma.like.findMany({
+//     where: { userId },
+//   });
+//   const comments = await prisma.comment.findMany({
+//     where: { userId },
+//   });
+//   // Calculate the similarity between each item in the user's feed and the items in the user's reading history, likes, and comments
+//   const feedItems = await prisma.feedItem.findMany({
+//     where: { userId },
+//   });
+//   const similarities = feedItems.map((item) => {
+//     const readingHistorySimilarity =
+//       readingHistory.filter((historyItem) => historyItem.itemId === item.id)
+//         .length / readingHistory.length;
+//     const likesSimilarity =
+//       likes.filter((likeItem) => likeItem.itemId === item.id).length /
+//       likes.length;
+//     const commentsSimilarity =
+//       comments.filter((commentItem) => commentItem.itemId === item.id).length /
+//       comments.length;
+//     return (
+//       (readingHistorySimilarity + likesSimilarity + commentsSimilarity) / 3
+//     );
+//   });
+//   // Rank the items in the user's feed based on their similarity to the user's reading history, likes, and comments
+//   const rankedItems = similarities
+//     .map((similarity, index) => ({ similarity, index }))
+//     .sort((a, b) => b.similarity - a.similarity);
+//   // Return the top N items in the user's feed as the recommended items
+//   const recommendedItems = rankedItems
+//     .slice(0, limit)
+//     .map((item) => feedItems[item.index]);
+//   return recommendedItems;
+// }
+//# sourceMappingURL=search.services.js.map
