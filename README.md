@@ -7,6 +7,8 @@ This project empowers developer communities with a fully functional blog website
 - Next.js: React-based framework for server-side rendering, static site generation, and API routes.
 - MongoDB: Flexible and performant NoSQL database for managing blogs, users, and comments.
 - Prisma.io: Powerful ORM enabling type-safe database interactions and simplified data access.
+- Redux: Powerfull statemanagment tool i used in many of my projects.
+- TailwindCSS: Flexible and such great styiling framework.
 
 ## Key Features:
 - Intuitive Blog Creation & Management: Share your knowledge with ease through a user-friendly authoring interface.
