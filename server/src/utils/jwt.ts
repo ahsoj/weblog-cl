@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import type { User } from '../types/types';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const { JWT_REFRESH_SECRET, JWT_ACCESS_SECRET } = process.env;
 

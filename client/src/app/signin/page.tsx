@@ -115,6 +115,7 @@ const SigninPage: React.FC = () => {
                       actions.resetForm();
                     })
                     .catch((err: any) => {
+                      console.log(err.response.data);
                       enqueueSnackbar(err.response.data, { variant: 'error' });
                       setFormSubmitting(false);
                     });
