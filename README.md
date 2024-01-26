@@ -1,4 +1,4 @@
-Developers collaborating on a blog website: ![](/preview_image.jpeg)
+# Developers collaborating on a blog website: ![](/preview_image.jpeg)
 
 This project empowers developer communities with a fully functional blog website built on a cutting-edge tech stack. Share your expertise, stay informed on the latest trends, and engage in meaningful discussions within a sleek and intuitive interface.
 
