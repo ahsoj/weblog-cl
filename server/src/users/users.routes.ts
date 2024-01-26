@@ -37,7 +37,7 @@ router.post('/saved', isAuthenticated, async (req, res, next) => {
   try {
     const { saved } = req.body;
     const bookmark = await UsersServices.createBookmark(saved);
-    res.status(200).send(bookmark);
+    res.status(200).json(bookmark);
   } catch (err) {
     next(err);
   }
@@ -47,7 +47,7 @@ router.get('/saved/ids/:userId', isAuthenticated, async (req, res, next) => {
   try {
     const { userId } = req.params;
     const bookmark = await UsersServices.getSavedTopicsId(userId);
-    res.status(200).send(bookmark);
+    res.status(200).json(bookmark);
   } catch (err) {
     next(err);
   }
@@ -57,7 +57,7 @@ router.get('/saved-for/:userId', isAuthenticated, async (req, res, next) => {
   try {
     const { userId } = req.params;
     const bookmark = await UsersServices.getSavedTopics(userId);
-    res.status(200).send(bookmark);
+    res.status(200).json(bookmark);
   } catch (err) {
     next(err);
   }

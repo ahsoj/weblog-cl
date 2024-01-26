@@ -5,13 +5,16 @@ import article from './posts/posts.routes';
 import comment from './feedback/feedbacks.routes';
 import cors from 'cors';
 import session from 'express-session';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const PORT: number = 8080;
 const memoryStore = new session.MemoryStore();
+const { EXPRESS_SESSION_SECRET } = process.env;
 
 const session_conf = {
-  secret: process.env.PXPRESS_SESSION_SECRET,
+  secret: EXPRESS_SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   store: memoryStore,
